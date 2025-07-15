@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "target": "ES2017",
+      "lib": ["ES2015", "ES2016", "ES2017", "DOM"],
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "rootDir": ".",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
+    },
+    "include": ["**/*.ts"],
+    "exclude": ["node_modules"]
+  }

@@ -1,0 +1,34 @@
+{
+    "name": "parabank-automation",
+    "version": "1.0.0",
+    "description": "ParaBank test automation with Playwright and TypeScript",
+    "scripts": {
+       "test:ui": "cucumber-js --config cucumber.js features/ui",
+    "test:api": "cucumber-js --config cucumber.js features/api",
+    "test": "npm run test:ui && npm run test:api"
+    },
+    "dependencies": {
+        "dotenv": "^16.3.1",
+        "faker": "^5.5.3",
+        "playwright": "^1.42.1"
+    },
+    "devDependencies": {
+        "@cucumber/cucumber": "^12.0.0",
+        "@faker-js/faker": "^9.9.0",
+        "@playwright/test": "^1.54.1",
+        "@types/ajv": "^0.0.5",
+        "@types/chai": "^4.3.20",
+        "@types/faker": "^5.5.9",
+        "@types/node": "^20.19.8",
+        "@typescript-eslint/eslint-plugin": "^6.13.1",
+        "@typescript-eslint/parser": "^6.13.1",
+        "ajv": "^8.17.1",
+        "chai": "^5.2.1",
+        "eslint": "^8.54.0",
+        "eslint-config-prettier": "^9.0.0",
+        "eslint-plugin-prettier": "^5.0.1",
+        "prettier": "^3.1.1",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.3"
+    }
+}

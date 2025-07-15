@@ -1,0 +1,109 @@
+import { Page, expect } from '@playwright/test';
+import { config } from '../support/config';
+
+export class AccountPage {
+  private readonly page: Page;
+
+  constructor(page: Page) {
+    this.page = page;
+  }
+
+  // Account Creation
+  async openNewAccount(accountType: string, initialBalance?: string): Promise<string> {
+    const accountConfig = accountType === 'SAVINGS' 
+      ? config.testData.account.savingsAccount 
+      : config.testData.account.checkingAccount;
+
+    await this.page.locator('text=Open New Account').click();
+    await this.page.selectOption('#type', accountConfig.type);
+    
+    if (initialBalance) {
+      await this.page.selectOption('#fromAccountId', { label: accountConfig.fromAccountId });
+    }
+    
+    await this.page.locator('input[value="Open New Account"]').click();
+    await expect(this.page.locator('#newAccountId')).toBeVisible();
+    return this.getNewAccountNumber();
+  }
+
+  async getNewAccountNumber(): Promise<string> {
+    return await this.page.locator('#newAccountId').textContent() || '';
+  }
+
+  // Fund Transfer
+  async transferFunds(fromAccountType: string, toAccountType: string, amount?: string): Promise<void> {
+    const transferConfig = config.testData.account.transfer;
+    
+    await this.page.locator('text=Transfer Funds').click();
+    await this.page.fill('#amount', amount || transferConfig.amount);
+    
+    await this.page.selectOption('#fromAccountId', { label: fromAccountType });
+    await this.page.selectOption('#toAccountId', { label: toAccountType });
+    
+    await this.page.locator('input[value="Transfer"]').click();
+    await expect(this.page.locator('h1.title')).toHaveText('Transfer Complete!');
+  }
+
+  // Bill Payment
+  async payBill(fromAccountType: string, payeeName?: string, amount?: string, description?: string): Promise<void> {
+    const billConfig = config.testData.account.billPayment;
+    
+    await this.page.locator('text=Bill Pay').click();
+    
+    await this.page.fill('input[name="payee.name"]', payeeName || billConfig.payeeName);
+    await this.page.fill('input[name="payee.address.street"]', billConfig.address);
+    await this.page.fill('input[name="payee.address.city"]', billConfig.city);
+    await this.page.fill('input[name="payee.address.state"]', billConfig.state);
+    await this.page.fill('input[name="payee.address.zipCode"]', billConfig.zipCode);
+    await this.page.fill('input[name="payee.phoneNumber"]', billConfig.phone);
+    await this.page.fill('input[name="payee.accountNumber"]', billConfig.accountNumber);
+    await this.page.fill('input[name="verifyAccount"]', billConfig.verifyAccount);
+    await this.page.fill('input[name="amount"]', amount || billConfig.amount);
+    
+    if (description) {
+      await this.page.fill('input[name="description"]', description);
+    }
+    
+    await this.page.selectOption('#fromAccountId', { label: fromAccountType });
+    await this.page.locator('input[value="Send Payment"]').click();
+    await expect(this.page.locator('h1.title')).toHaveText('Bill Payment Complete');
+  }
+
+  // Transaction History
+  async getRecentTransactions(accountNumber?: string): Promise<string[]> {
+    await this.page.locator('text=Account Activity').click();
+    
+    if (accountNumber) {
+      await this.page.selectOption('#accountId', { label: accountNumber });
+    }
+    
+    await this.page.locator('button:has-text("Find Transactions")').click();
+    const transactions = await this.page.locator('tr.ng-scope td:nth-child(2)').allTextContents();
+    return transactions.map(t => t.trim()).filter(t => t);
+  }
+
+  async filterTransactions(filterType: string, filterValue: string): Promise<void> {
+    await this.page.locator('text=Find Transactions').click();
+    
+    switch (filterType.toLowerCase()) {
+      case 'date range':
+        await this.page.selectOption('#transactionType', 'range');
+        await this.page.fill('#transactionDateFrom', '01/01/2023');
+        await this.page.fill('#transactionDateTo', '12/31/2023');
+        break;
+      case 'amount':
+        await this.page.fill('#criteria.amount', filterValue);
+        break;
+      case 'type':
+        await this.page.selectOption('#criteria.transactionType', filterValue);
+        break;
+    }
+    
+    await this.page.locator('button:has-text("Find Transactions")').click();
+  }
+
+  async getFilteredTransactions(): Promise<string[]> {
+    const transactions = await this.page.locator('tr.ng-scope td:nth-child(2)').allTextContents();
+    return transactions.map(t => t.trim()).filter(t => t);
+  }
+}
