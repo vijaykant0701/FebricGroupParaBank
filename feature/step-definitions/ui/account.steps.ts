@@ -42,4 +42,3 @@ When('I pay bill with following details:',
     accountBalances[details.fromAccountType] -= amountNum;
   });
 
-// ... (keep other existing steps)

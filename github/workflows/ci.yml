@@ -1,0 +1,45 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        
+    - name: Install dependencies
+      run: npm install
+      
+    - name: Run lint
+      run: npm run lint
+      
+    - name: Run UI tests
+      run: npm run test:ui
+      
+    - name: Run API tests
+      run: npm run test:api
+      
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: |
+          test-results/
+          playwright-report/
+          
+    - name: Upload HTML report
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: html-report
+        path: playwright-report/

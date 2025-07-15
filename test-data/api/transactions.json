@@ -1,0 +1,10 @@
+{
+  "findByAmount": {
+    "endpoint": "/services_proxy/bank/accounts/{accountId}/transactions/amount/{amount}",
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    }
+  }
+}

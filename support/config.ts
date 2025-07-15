@@ -8,7 +8,7 @@ interface TestData {
   ui: {
     registration: any;
     accounts: any;
-    navigation: any;
+    
   };
   api: {
     transactions: {
@@ -77,22 +77,45 @@ interface TestData {
   };
 }
 
-const loadTestData = (): TestData => {
-  const dataPath = path.join(__dirname, '../test-data');
+const loadJsonFile = (filePath: string): any => {
+    const fullPath = path.join(__dirname, '../test-data', filePath);
+    console.log(`Loading test data from: ${fullPath}`);
   
-  return {
-    ui: {
-      registration: JSON.parse(fs.readFileSync(path.join(dataPath, 'ui/registration.json'), 'utf-8')),
-      accounts: JSON.parse(fs.readFileSync(path.join(dataPath, 'ui/accounts.json'), 'utf-8')),
-      navigation: JSON.parse(fs.readFileSync(path.join(dataPath, 'ui/navigation.json'), 'utf-8'))
-    },
-    api: {
-      transactions: JSON.parse(fs.readFileSync(path.join(dataPath, 'api/transactions.json'), 'utf-8'))
-    },
-    account: JSON.parse(fs.readFileSync(path.join(dataPath, 'ui/account.json'), 'utf-8')),
-    registration: JSON.parse(fs.readFileSync(path.join(dataPath, 'ui/registration.json'), 'utf-8'))
+    if (!fs.existsSync(fullPath)) {
+      console.error(`❌ File not found: ${fullPath}`);
+      console.error(`Please create this file with valid JSON content`);
+      process.exit(1);
+    }
+  
+    const content = fs.readFileSync(fullPath, 'utf-8').trim();
+    if (!content) {
+      console.error(`❌ File is empty: ${fullPath}`);
+      process.exit(1);
+    }
+  
+    try {
+      return JSON.parse(content);
+    } catch (error) {
+      console.error(`❌ Invalid JSON in file: ${fullPath}`);
+      console.error(`Error details:`, error);
+      process.exit(1);
+    }
   };
-};
+  
+  const loadTestData = (): TestData => {
+    return {
+      ui: {
+        registration: loadJsonFile('ui/registration.json'),
+        accounts: loadJsonFile('ui/accounts.json'),
+        
+      },
+      api: {
+        transactions: loadJsonFile('api/transactions.json')
+      },
+      account: loadJsonFile('account.json'),
+      registration: loadJsonFile('registration.json')
+    };
+  };
 
 export const config = {
   env: ENV,

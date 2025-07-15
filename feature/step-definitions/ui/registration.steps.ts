@@ -33,5 +33,3 @@ When('I fill in registration form with following details:',
       confirmPassword: userData.confirmPassword || userData.password
     });
 });
-
-// ... (keep other existing steps)
