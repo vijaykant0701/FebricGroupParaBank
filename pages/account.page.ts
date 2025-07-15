@@ -8,13 +8,19 @@ export class AccountPage {
     this.page = page;
   }
 
-  // Account Creation
+  // Common Navigation
+  async navigateTo(section: string): Promise<void> {
+    await this.page.locator(`text=${section}`).click();
+    await expect(this.page.locator('h1.title')).toBeVisible();
+  }
+
+  // Account Management
   async openNewAccount(accountType: string, initialBalance?: string): Promise<string> {
     const accountConfig = accountType === 'SAVINGS' 
       ? config.testData.account.savingsAccount 
       : config.testData.account.checkingAccount;
 
-    await this.page.locator('text=Open New Account').click();
+    await this.navigateTo('Open New Account');
     await this.page.selectOption('#type', accountConfig.type);
     
     if (initialBalance) {
@@ -34,7 +40,7 @@ export class AccountPage {
   async transferFunds(fromAccountType: string, toAccountType: string, amount?: string): Promise<void> {
     const transferConfig = config.testData.account.transfer;
     
-    await this.page.locator('text=Transfer Funds').click();
+    await this.navigateTo('Transfer Funds');
     await this.page.fill('#amount', amount || transferConfig.amount);
     
     await this.page.selectOption('#fromAccountId', { label: fromAccountType });
@@ -44,11 +50,19 @@ export class AccountPage {
     await expect(this.page.locator('h1.title')).toHaveText('Transfer Complete!');
   }
 
+  // Balance Verification
+  async getAccountBalance(accountType: string): Promise<string> {
+    await this.navigateTo('Accounts Overview');
+    const balanceLocator = this.page.locator(`tr:has-text("${accountType}") td:nth-child(2)`);
+    await expect(balanceLocator).toBeVisible();
+    return await balanceLocator.textContent() || '0.00';
+  }
+
   // Bill Payment
   async payBill(fromAccountType: string, payeeName?: string, amount?: string, description?: string): Promise<void> {
     const billConfig = config.testData.account.billPayment;
     
-    await this.page.locator('text=Bill Pay').click();
+    await this.navigateTo('Bill Pay');
     
     await this.page.fill('input[name="payee.name"]', payeeName || billConfig.payeeName);
     await this.page.fill('input[name="payee.address.street"]', billConfig.address);
@@ -71,7 +85,7 @@ export class AccountPage {
 
   // Transaction History
   async getRecentTransactions(accountNumber?: string): Promise<string[]> {
-    await this.page.locator('text=Account Activity').click();
+    await this.navigateTo('Account Activity');
     
     if (accountNumber) {
       await this.page.selectOption('#accountId', { label: accountNumber });
@@ -82,28 +96,19 @@ export class AccountPage {
     return transactions.map(t => t.trim()).filter(t => t);
   }
 
-  async filterTransactions(filterType: string, filterValue: string): Promise<void> {
-    await this.page.locator('text=Find Transactions').click();
-    
-    switch (filterType.toLowerCase()) {
-      case 'date range':
-        await this.page.selectOption('#transactionType', 'range');
-        await this.page.fill('#transactionDateFrom', '01/01/2023');
-        await this.page.fill('#transactionDateTo', '12/31/2023');
-        break;
-      case 'amount':
-        await this.page.fill('#criteria.amount', filterValue);
-        break;
-      case 'type':
-        await this.page.selectOption('#criteria.transactionType', filterValue);
-        break;
-    }
-    
-    await this.page.locator('button:has-text("Find Transactions")').click();
+  // Account Verification
+  async accountExists(accountNumber: string): Promise<boolean> {
+    await this.navigateTo('Accounts Overview');
+    return await this.page.locator(`text=${accountNumber}`).isVisible();
   }
 
-  async getFilteredTransactions(): Promise<string[]> {
-    const transactions = await this.page.locator('tr.ng-scope td:nth-child(2)').allTextContents();
-    return transactions.map(t => t.trim()).filter(t => t);
+  // Login Status
+  async isLoggedIn(): Promise<boolean> {
+    try {
+      await expect(this.page.locator('text=Log Out')).toBeVisible({ timeout: 5000 });
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

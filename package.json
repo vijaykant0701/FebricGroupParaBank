@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "ParaBank test automation with Playwright and TypeScript",
     "scripts": {
-       "test:ui": "cucumber-js --config cucumber.js features/ui",
+       "test:ui": "cucumber-js --config cucumber.js feature/ui",
     "test:api": "cucumber-js --config cucumber.js features/api",
     "test": "npm run test:ui && npm run test:api"
     },

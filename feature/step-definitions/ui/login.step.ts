@@ -18,3 +18,6 @@ When('I login with username {string} and password {string}',
 Then('I should be logged in', async function (this: CustomWorld) {
   expect(await loginPage.isLoggedIn()).to.be.true;
 });
+Then('I should not be logged in', async function (this: CustomWorld) {
+    expect(await loginPage.isLoggedIn()).to.be.false;
+  });

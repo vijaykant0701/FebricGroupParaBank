@@ -1,0 +1,26 @@
+{
+  "validRegistration": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "123 Main St",
+    "city": "Anytown",
+    "state": "CA",
+    "zipCode": "12345",
+    "phone": "555-123-4567",
+    "ssn": "123-45-6789",
+    "password": "password123",
+    "confirmPassword": "password123"
+  },
+  "invalidRegistration": {
+    "firstName": "",
+    "lastName": "",
+    "address": "",
+    "city": "",
+    "state": "",
+    "zipCode": "",
+    "phone": "",
+    "ssn": "",
+    "password": "",
+    "confirmPassword": ""
+  }
+}

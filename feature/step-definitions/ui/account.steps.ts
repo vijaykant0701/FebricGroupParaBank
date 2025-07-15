@@ -2,6 +2,8 @@ import { Given, When, Then, DataTable } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import { AccountPage } from '../../../pages/account.page';
 import { config } from '../../../support/config';
+import { LoginPage } from '../../../pages/login.page';
+import { CustomWorld } from '../../../support/world';
 
 let accountPage: AccountPage;
 const accountBalances: Record<string, number> = {};
@@ -41,4 +43,16 @@ When('I pay bill with following details:',
     const amountNum = parseFloat(details.amount || config.testData.account.billPayment.amount);
     accountBalances[details.fromAccountType] -= amountNum;
   });
-
+  Then('the {string} balance should be {string}', 
+    async function (accountType: string, expectedBalance: string) {
+      const actualBalance = await accountPage.getAccountBalance(accountType);
+      expect(parseFloat(actualBalance)).to.equal(parseFloat(expectedBalance));
+    });
+  
+  Given('I am logged in as user {string} with password {string}',
+    async function (this: CustomWorld, username: string, password: string) {
+      const loginPage = new LoginPage(this.page);
+      await loginPage.navigate();
+      await loginPage.login(username, password);
+      expect(await loginPage.isLoggedIn()).to.be.true;
+    });

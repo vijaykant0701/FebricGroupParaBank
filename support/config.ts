@@ -77,6 +77,20 @@ interface TestData {
   };
 }
 
+const ensureTestDataFile = (filePath: string, defaultContent: string): void => {
+    const fullPath = path.join(__dirname, '../test-data', filePath);
+    if (!fs.existsSync(fullPath)) {
+      console.warn(`⚠️ Creating default file: ${fullPath}`);
+      fs.mkdirSync(path.dirname(fullPath), { recursive: true });
+      fs.writeFileSync(fullPath, defaultContent);
+    }
+  };
+  const initializeTestDataFiles = () => {
+    ensureTestDataFile('account.json', JSON.stringify({
+      savingsAccount: { type: "SAVINGS", fromAccountId: "12345", initialDeposit: "1000.00" }
+    }, null, 2));
+    
+  }
 const loadJsonFile = (filePath: string): any => {
     const fullPath = path.join(__dirname, '../test-data', filePath);
     console.log(`Loading test data from: ${fullPath}`);

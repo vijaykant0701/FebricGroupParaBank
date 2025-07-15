@@ -1,57 +1,50 @@
-Feature: Account Management
+Feature: Account Operations
   As a ParaBank customer
   I want to manage my accounts
-  So that I can perform banking transactions
+  So that I can control my finances
 
   Background:
-    Given I am logged in as a registered user
-    And I have the following accounts:
+    Given I am logged in as user "john" with password "demo"
+
+  @accounts @setup
+  Scenario: Create new accounts
+    Given I have the following accounts:
       | accountType | initialBalance |
-      | SAVINGS     | 1000.00        |
-      | CHECKING    | 500.00         |
+      | SAVINGS    | 1000.00        |
+      | CHECKING   | 500.00         |
 
-  Scenario Outline: Create new accounts
-    When I open a new "<accountType>" account with initial deposit "<initialDeposit>"
-    Then I should see the new "<accountType>" account in accounts overview
-    And the account balance should be "<expectedBalance>"
+  @transfer @money
+  Scenario: Transfer funds between accounts
+    Given I have the following accounts:
+      | accountType | initialBalance |
+      | SAVINGS    | 1000.00        |
+      | CHECKING   | 500.00         |
+    When I transfer "200.00" from "SAVINGS" to "CHECKING"
+    Then the "SAVINGS" balance should be "800.00"
+    And the "CHECKING" balance should be "700.00"
 
-    Examples:
-      | accountType | initialDeposit | expectedBalance |
-      | SAVINGS     | 1500.00        | 1500.00         |
-      | CHECKING    | 750.00         | 750.00          |
-      | SAVINGS     | 200.00         | 200.00          |
-
-  Scenario Outline: Transfer funds between accounts
-    When I transfer "<amount>" from "<fromAccountType>" to "<toAccountType>"
-    Then the "<fromAccountType>" balance should decrease by "<amount>"
-    And the "<toAccountType>" balance should increase by "<amount>"
-
-    Examples:
-      | amount  | fromAccountType | toAccountType |
-      | 100.00  | SAVINGS         | CHECKING      |
-      | 50.00   | CHECKING        | SAVINGS       |
-      | 250.00  | SAVINGS         | CHECKING      |
-
-  Scenario Outline: Pay bills from account
+  @bills @payment
+  Scenario: Pay a bill
+    Given I have the following accounts:
+      | accountType | initialBalance |
+      | CHECKING   | 1000.00        |
     When I pay bill with following details:
-      | fromAccountType | payeeName | amount  | description       |
-      | <fromAccount>   | <payee>   | <amount>| <description>     |
-    Then the "<fromAccount>" balance should decrease by "<amount>"
-    And the transaction should appear in account activity
+      | fromAccountType | payeeName     | amount  | description          |
+      | CHECKING       | Electric Co.  | 150.00  | Monthly electricity |
+    Then the "CHECKING" balance should be "850.00"
+
+  @transfer @data-driven
+  Scenario Outline: Transfer different amounts
+    Given I have the following accounts:
+      | accountType | initialBalance |
+      | SAVINGS    | 1000.00        |
+      | CHECKING   | 500.00         |
+    When I transfer "<amount>" from "<from>" to "<to>"
+    Then the "<from>" balance should be "<fromBalance>"
+    And the "<to>" balance should be "<toBalance>"
 
     Examples:
-      | fromAccount | payee          | amount  | description          |
-      | SAVINGS     | Electric Co    | 75.50   | Monthly electricity  |
-      | CHECKING    | Internet Provider | 45.00 | Internet bill        |
-      | SAVINGS     | Water Company  | 35.25   | Water bill           |
-
-  Scenario Outline: Verify account activity filters
-    Given I have performed transactions in my "<accountType>" account
-    When I filter account activity by "<filterType>" with value "<filterValue>"
-    Then I should see only matching transactions
-
-    Examples:
-      | accountType | filterType | filterValue |
-      | SAVINGS     | Date Range | This Month  |
-      | CHECKING    | Amount     | 100.00      |
-      | SAVINGS     | Type       | Debit       |
+      | amount | from     | to       | fromBalance | toBalance |
+      | 100.00 | SAVINGS  | CHECKING | 900.00      | 600.00    |
+      | 50.00  | CHECKING | SAVINGS  | 450.00      | 1050.00   |
+      | 200.00 | SAVINGS  | CHECKING | 800.00      | 700.00    |

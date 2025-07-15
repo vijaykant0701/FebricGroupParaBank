@@ -1,35 +1,34 @@
-// features/support/hooks.ts
-import { setWorldConstructor, Before, After, BeforeAll, AfterAll } from '@cucumber/cucumber';
-import { chromium, Browser, BrowserContext, Page } from '@playwright/test';
-import { CustomWorld } from './world';
+import { BeforeAll, AfterAll, Before, After, Status } from '@cucumber/cucumber';
+import { Browser, chromium, Page } from 'playwright';
+import { config } from '../support/config';
 
-// Register the custom world
-setWorldConstructor(CustomWorld);
+let browser: Browser;
+let page: Page;
 
-// Type the hooks using the hook function approach
 BeforeAll(async function () {
-  const world = this as CustomWorld;
-  world.browser = await chromium.launch({ 
-    headless: false,
-    timeout: 10000
+  browser = await chromium.launch({
+    headless: config.env === 'production', // headless in prod, visible in dev
+    slowMo: 50
   });
 });
 
 Before(async function () {
-  const world = this as CustomWorld;
-  world.context = await world.browser.newContext({
-    viewport: { width: 1280, height: 720 }
-  });
-  world.page = await world.context.newPage();
+  page = await browser.newPage();
+  this.page = page; // Make page available to all step definitions
 });
 
-After(async function () {
-  const world = this as CustomWorld;
-  await world.page.close();
-  await world.context.close();
+After(async function ({ pickle, result }) {
+  if (result?.status === Status.FAILED) {
+    const screenshot = await page.screenshot({
+      path: `./test-results/screenshots/${pickle.name.replace(/\s/g, '_')}.png`,
+    });
+    this.attach(screenshot, 'image/png');
+  }
+  await page.close();
 });
 
 AfterAll(async function () {
-  const world = this as CustomWorld;
-  await world.browser.close();
+  if (browser) {
+    await browser.close();
+  }
 });
