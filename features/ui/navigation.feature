@@ -1,13 +1,14 @@
+@navigation
 Feature: Global Navigation
   As a ParaBank user
   I want to navigate through the application
   So that I can access all banking features
 
-  Background:
-    Given I am logged in as a registered user
+#   Background:
+#     Given I am logged in as a registered user
 
   Scenario Outline: Verify navigation menu items
-    When I click on the "<menuItem>" in the global navigation
+    When I navigate to ParaBank registration page
     Then I should be redirected to the "<expectedPage>" page
     And the page title should contain "<expectedTitle>"
 

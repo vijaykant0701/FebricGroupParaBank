@@ -3,14 +3,17 @@
     "version": "1.0.0",
     "description": "ParaBank test automation with Playwright and TypeScript",
     "scripts": {
-       "test:ui": "cucumber-js --config cucumber.js feature/ui",
-    "test:api": "cucumber-js --config cucumber.js features/api",
-    "test": "npm run test:ui && npm run test:api"
+        "clean": "rm -rf test-results/ reports/ node_modules/.cache/ playwright/.cache/",
+        "pretest": "npm run clean",
+        "test": "npm run test:ui",
+        "test:ui": "cucumber-js --config cucumber.js features/ui",
+        "test:api": "cucumber-js --config cucumber.js features/api",
+        "test:registration": "npm run clean && cucumber-js --tags @registration features/ui/registration.feature"
     },
     "dependencies": {
         "dotenv": "^16.3.1",
         "faker": "^5.5.3",
-        "playwright": "^1.42.1"
+        "playwright": "^1.54.1"
     },
     "devDependencies": {
         "@cucumber/cucumber": "^12.0.0",
@@ -24,6 +27,7 @@
         "@typescript-eslint/parser": "^6.13.1",
         "ajv": "^8.17.1",
         "chai": "^5.2.1",
+        "cucumber-html-reporter": "^7.2.0",
         "eslint": "^8.54.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-plugin-prettier": "^5.0.1",

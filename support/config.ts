@@ -4,7 +4,7 @@ import path from 'path';
 const ENV = process.env.NODE_ENV || 'development';
 const BASE_URL = process.env.BASE_URL || 'https://parabank.parasoft.com/parabank';
 
-interface TestData {
+export interface TestData {
   ui: {
     registration: any;
     accounts: any;

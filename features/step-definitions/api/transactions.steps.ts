@@ -2,7 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import { expect } from 'chai';
 import { AccountPage } from '../../../pages/account.page';
 import { CustomWorld } from '../../../support/world';
-import { ApiClient } from '../../../support/ api-client';
+import { ApiClient } from '../../../support/api-client';
 
 Given('I have made payment transactions with the following details:',
   async function (this: CustomWorld, dataTable: any) {
@@ -16,11 +16,8 @@ Given('I have made payment transactions with the following details:',
         this.accountIds[row.accountType] = await accountPage.getNewAccountNumber();
       }
 
-      await accountPage.payBill(
-        this.accountIds[row.accountType],
-        row.payeeName,
-        row.amount,
-        row.description
+      await accountPage.paybill(
+       
       );
     }
   }

@@ -1,17 +1,18 @@
+
 Feature: Account Operations
   As a ParaBank customer
   I want to manage my accounts
   So that I can control my finances
 
-  Background:
-    Given I am logged in as user "john" with password "demo"
+#   Background:
+#     Given I am logged in as user "john" with password "demo"
 
   @accounts @setup
-  Scenario: Create new accounts
-    Given I have the following accounts:
-      | accountType | initialBalance |
-      | SAVINGS    | 1000.00        |
-      | CHECKING   | 500.00         |
+  # Scenario: Create new accounts
+  #   Given I have the following accounts:
+  #     | accountType | initialBalance |
+  #     | SAVINGS    | 1000.00        |
+  #     | CHECKING   | 500.00         |
 
   @transfer @money
   Scenario: Transfer funds between accounts

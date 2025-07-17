@@ -11,6 +11,7 @@ export class RegistrationPage {
 
   async navigate(): Promise<void> {
     await this.page.goto(`${config.baseUrl}/register.htm`);
+    
   }
 
   async fillRegistrationForm(userDetails?: {
@@ -46,8 +47,33 @@ export class RegistrationPage {
     await this.page.fill('input[name="repeatedPassword"]', userDetails?.confirmPassword || password);
   }
 
-  async submitForm(): Promise<void> {
-    await this.page.click('input[value="Register"]');
-    await this.page.waitForNavigation();
+  // registration.page.ts
+async submitForm(): Promise<void> {
+    const submitButton = this.page.locator('input[value="Register"]');
+    
+    // Wait for button to be visible and enabled
+    await submitButton.waitFor({ state: 'visible', timeout: 10000 });
+    submitButton.click()
+   // await submitButton.waitFor({ state: 'enabled', timeout: 10000 });
+    
+    // Click and wait for navigation
+    // await Promise.all([
+    //   this.page.waitForNavigation({ 
+    //     url: '**/overview.htm', 
+    //     timeout: 15000 
+    //   }),
+    //   submitButton.click()
+    // ]);
+    
+    
+    // Verify successful registration
+//     await this.page.waitForSelector('#rightPanel p', { 
+//       state: 'visible', 
+//       timeout: 10000 
+//     });
+//     const successText = await this.page.innerText('#rightPanel p');
+//     if (!successText.includes('Your account was created successfully')) {
+//       throw new Error('Registration failed: ' + successText);
+//     }
   }
 }

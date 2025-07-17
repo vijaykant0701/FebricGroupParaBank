@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 export function generateRandomUsername(): string {
-  return `user_${faker.string.alphanumeric(8)}_${Date.now()}`;
+  return `user_${faker.string.alphanumeric(8)}}`;
 }
 
 export function generateRandomPassword(): string {

@@ -1,0 +1,232 @@
+[
+  {
+    "description": "  As a new user\n  I want to register on ParaBank\n  So that I can access banking services",
+    "elements": [
+      {
+        "description": "",
+        "id": "user-registration;successful-user-registration-with-random-data",
+        "keyword": "Scenario",
+        "line": 7,
+        "name": "Successful user registration with random data",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 1123270750
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 8,
+            "name": "I navigate to ParaBank registration page",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2767330082
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "When ",
+            "line": 9,
+            "name": "I fill in registration form with random details",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:30"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 715128665
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 10,
+            "name": "I submit the registration form",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 11666250
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 11,
+            "name": "I should be logged in with same user",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:56"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 22490541
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 146334
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@registration",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      },
+      {
+        "description": "",
+        "id": "user-registration;successful-user-registration-with-specific-data",
+        "keyword": "Scenario Outline",
+        "line": 13,
+        "name": "Successful user registration with specific data",
+        "steps": [
+          {
+            "keyword": "Before",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 833766209
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Given ",
+            "line": 14,
+            "name": "I navigate to ParaBank registration page",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:19"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 2783867792
+            }
+          },
+          {
+            "arguments": [
+              {
+                "rows": [
+                  {
+                    "cells": [
+                      "firstName",
+                      "lastName",
+                      "address",
+                      "city",
+                      "state",
+                      "zipCode",
+                      "phone",
+                      "ssn",
+                      "password",
+                      "confirmPassword"
+                    ]
+                  },
+                  {
+                    "cells": [
+                      "vijay",
+                      "Mishra",
+                      "Bhopal",
+                      "Bhopal",
+                      "MP",
+                      "402039",
+                      "9090909090",
+                      "121",
+                      "Test@123",
+                      "Test@123"
+                    ]
+                  }
+                ]
+              }
+            ],
+            "keyword": "When ",
+            "line": 15,
+            "name": "I fill in registration form with these details:",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:36"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 752964332
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 19,
+            "name": "I should be logged in with same user",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:56"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 7083332
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "And ",
+            "line": 20,
+            "name": "I submit the registration form",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:63"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 10738540
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Then ",
+            "line": 21,
+            "name": "I have the following accounts:",
+            "match": {
+              "location": "features/step-definitions/ui/registration.steps.ts:81"
+            },
+            "result": {
+              "status": "passed",
+              "duration": 3380886042
+            }
+          },
+          {
+            "keyword": "After",
+            "hidden": true,
+            "result": {
+              "status": "passed",
+              "duration": 128416
+            }
+          }
+        ],
+        "tags": [
+          {
+            "name": "@registration",
+            "line": 1
+          }
+        ],
+        "type": "scenario"
+      }
+    ],
+    "id": "user-registration",
+    "line": 2,
+    "keyword": "Feature",
+    "name": "User Registration",
+    "tags": [
+      {
+        "name": "@registration",
+        "line": 1
+      }
+    ],
+    "uri": "features/ui/registration.feature"
+  }
+]

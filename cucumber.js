@@ -1,11 +1,12 @@
 module.exports = {
     default: {
-      publishQuiet: true,  // This replaces --publish-quiet
-      format: ['progress-bar', 'html:reports/cucumber-report.html'],
+      paths: ['features/ui'],
       require: [
-        'feature/step-definitions/**/*.ts',
-        'support/**/*.ts'
+        'features/step-definitions/ui/*.ts',
+        'support/*.ts'
       ],
-      requireModule: ['ts-node/register']
+      requireModule: ['ts-node/register'],
+      worldParameters: {},
+      format: ['progress', 'json:reports/cucumber-report.json']
     }
   }

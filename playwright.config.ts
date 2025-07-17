@@ -6,6 +6,13 @@ export default defineConfig({
   testDir: './tests', // Your regular Playwright tests
   timeout: 30 * 1000,
   expect: { timeout: 5000 },
+
+  reporter: [
+    ['list'], // Simple console reporter
+    ['html'], // HTML report
+    ['json', { outputFile: 'test-results.json' }], // JSON report
+    ['junit', { outputFile: 'results.xml' }] // JUnit report for CI
+  ],
   
   // Cucumber-specific configuration
   projects: [
